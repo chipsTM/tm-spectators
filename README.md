@@ -1,4 +1,4 @@
-# [WebSockets](https://openplanet.dev/plugin/spectators)
+# [Spectators](https://openplanet.dev/plugin/spectators)
 
 ![Image](./opfiles/Spectators.png)
 
