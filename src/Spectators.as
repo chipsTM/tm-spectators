@@ -8,6 +8,10 @@ float anchor_x = 0.536;
 float anchor_y = 0.91;
 [Setting name="font_size" min=10 max=100]
 int size = 24;
+[Setting name="drop_shadow"]
+bool drop_shadow = true;
+[Setting name="color" color]
+vec4 color = vec4(1.0,1.0,1.0,1.0);
 
 void RenderMenu() {
 	if (UI::MenuItem(Icons::User + "\\$z Spec Counter", "", show_spec)) {
@@ -47,17 +51,28 @@ void Render() {
             }
         }
     }
+    uint shadow_offset = 2;
     if (show_spec && numSpec > 0) {
         nvg::FontSize(size);
         nvg::TextAlign(nvg::Align::Center | nvg::Align::Middle);
         string t = Icons::Eye + " " + numSpec;
         float g_w = anchor_x * Draw::GetWidth();
         float g_h = anchor_y * Draw::GetHeight();
+        if (drop_shadow) {
+            nvg::FillColor(vec4(0, 0, 0, 1));
+            nvg::Text(g_w + shadow_offset, g_h + shadow_offset, t);
+        }
+        nvg::FillColor(color);
         nvg::Text(g_w, g_h, t);
         vec2 mouse = UI::GetMousePos();
         vec2 bounds = nvg::TextBounds(t);
         if (mouse.x > g_w - bounds.x/2 && mouse.x <  g_w + bounds.x/2 && mouse.y > g_h - bounds.y/2 && mouse.y <  g_h + bounds.y/2) {
             for (uint w = 0; w < directspec.Length; w++) {
+                if (drop_shadow) {
+                    nvg::FillColor(vec4(0, 0, 0, 1));
+                    nvg::Text(g_w + 2 * bounds.x + shadow_offset, g_h - w * bounds.y + shadow_offset, directspec[w]);
+                }
+                nvg::FillColor(color);
                 nvg::Text(g_w + 2 * bounds.x, g_h - w * bounds.y, directspec[w]);
             }
         }
